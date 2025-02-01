@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken'
+const jwt = require('jsonwebtoken')
 
-export const authMiddleware = (req, res, next) => {
+const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization
 
   if (!authHeader) {
@@ -11,9 +11,11 @@ export const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    req.userId = decoded.userId
+    req.Id = decoded.Id
     next()
   } catch (error) {
     return res.status(401).json({ message: 'Invalid token' })
   }
 }
+
+module.exports = { authMiddleware }

@@ -1,20 +1,21 @@
-import express from 'express'
-import dotenv from 'dotenv'
-import cors from 'cors'
-import { authRouter } from './routes/auth.routes.js'
-import { errorHandler } from './middlewares/errorHandler.js'
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
 
-dotenv.config()
+const { userRouter } = require('./routes/user.routes.js');
+const { adminRouter } = require('./routes/admin.routes.js');
+const { errorHandler } = require('./middlewares/errorHandler.js');
 
-const app = express()
+const app = express();
 
-app.use(cors())
+app.use(cors());
+app.use(express.json());
 
-app.use(express.json())
+// Use User routes
+app.use('/user', userRouter);
+app.use('/admin', adminRouter);
 
-app.use('/', authRouter)
+app.use(errorHandler);
 
-app.use(errorHandler)
-
-const PORT = process.env.PORT || 3000
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
